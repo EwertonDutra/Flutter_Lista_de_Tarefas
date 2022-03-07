@@ -18,7 +18,7 @@ class TodoListPage extends StatelessWidget {
                     child: TextField(
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Adicione uma tarefa',
+                          labelText: 'Adicione uma tarefa aqui',
                           hintText: 'Ex.: Estudar Flutter'),
                     ),
                   ),
@@ -28,7 +28,7 @@ class TodoListPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xff00d7f3),
+                        primary: const Color(0xff00d7f3),
                         padding: const EdgeInsets.all(14)),
                     child: const Icon(
                       Icons.add,
