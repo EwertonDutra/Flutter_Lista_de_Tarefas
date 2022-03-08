@@ -14,6 +14,8 @@ class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController todoController = TextEditingController();
 
   List<Todo> tarefas = [];
+  Todo? deletedTarefa;
+  int? deletedTarefaPos;
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +108,35 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   void onDelete(Todo todo) {
+    deletedTarefa = todo;
+    deletedTarefaPos = tarefas.indexOf(todo);
+
     setState(() {
       tarefas.remove(todo);
     });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Tarefa ${todo.title} foi removida com sucesso!',
+          style: const TextStyle(color: Color(0xff060708)),
+        ),
+        backgroundColor: Colors.white,
+        action: SnackBarAction(
+          label: 'Desfazer',
+          textColor: const Color(0xff00d7f3),
+          onPressed: () {
+            setState(() {
+              tarefas.insert(
+                deletedTarefaPos!,
+                deletedTarefa!,
+              );
+            });
+          },
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
   }
 }
