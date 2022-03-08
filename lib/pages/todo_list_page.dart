@@ -37,7 +37,9 @@ class TodoListPage extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               Row(
                 children: [
                   const Expanded(
