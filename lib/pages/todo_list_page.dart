@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_tarefas/models/todo.dart';
+import 'package:lista_tarefas/repositories/todo_repository.dart';
 
 import '../widgets/todo_list_item.dart';
 
@@ -12,10 +13,21 @@ class TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController todoController = TextEditingController();
+  final TodoRepository todoRepository = TodoRepository();
 
   List<Todo> tarefas = [];
   Todo? deletedTarefa;
   int? deletedTarefaPos;
+
+  @override
+  void initState() {
+    super.initState();
+    todoRepository.getTodoList().then((value) {
+      setState(() {
+        tarefas = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +64,7 @@ class _TodoListPageState extends State<TodoListPage> {
                           tarefas.add(newTodo);
                         });
                         todoController.clear();
+                        todoRepository.saveTodoList(tarefas);
                       },
                       style: ElevatedButton.styleFrom(
                           primary: const Color(0xff00d7f3),
@@ -138,6 +151,7 @@ class _TodoListPageState extends State<TodoListPage> {
         duration: const Duration(seconds: 5),
       ),
     );
+    todoRepository.saveTodoList(tarefas);
   }
 
   void showDeleteTodosConfirmationDialogs() {
@@ -176,5 +190,6 @@ class _TodoListPageState extends State<TodoListPage> {
     setState(() {
       tarefas.clear();
     });
+    todoRepository.saveTodoList(tarefas);
   }
 }
