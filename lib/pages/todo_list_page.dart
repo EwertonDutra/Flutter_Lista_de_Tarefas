@@ -18,6 +18,7 @@ class _TodoListPageState extends State<TodoListPage> {
   List<Todo> tarefas = [];
   Todo? deletedTarefa;
   int? deletedTarefaPos;
+  String? errorText;
 
   @override
   void initState() {
@@ -44,10 +45,21 @@ class _TodoListPageState extends State<TodoListPage> {
                     Expanded(
                       child: TextField(
                         controller: todoController,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Adicione uma tarefa aqui',
-                            hintText: 'Ex.: Estudar Flutter'),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: 'Adicione uma tarefa aqui',
+                          hintText: 'Ex.: Estudar Flutter',
+                          errorText: errorText,
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xff00d7f3),
+                              width: 3,
+                            ),
+                          ),
+                          labelStyle: const TextStyle(
+                            color: Color(0xff00d7f3),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -56,12 +68,21 @@ class _TodoListPageState extends State<TodoListPage> {
                     ElevatedButton(
                       onPressed: () {
                         String text = todoController.text;
+
+                        if (text.isEmpty) {
+                          setState(() {
+                            errorText = 'O título não pode ser vazio!';
+                          });
+                          return;
+                        }
+
                         setState(() {
                           Todo newTodo = Todo(
                             title: text,
                             date: DateTime.now(),
                           );
                           tarefas.add(newTodo);
+                          errorText = null;
                         });
                         todoController.clear();
                         todoRepository.saveTodoList(tarefas);
